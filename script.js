@@ -2,8 +2,9 @@ const API = "https://shadoww617-nyayabot.hf.space/ask";
 
 let history = [];
 
-function add(text, type) {
+function add(text, type, laws = []) {
   const chat = document.getElementById("chat");
+
   const msg = document.createElement("div");
   msg.className = "msg " + type;
 
@@ -12,8 +13,26 @@ function add(text, type) {
   bubble.innerText = text;
 
   msg.appendChild(bubble);
+
+  if (laws.length > 0) {
+    const lawBox = document.createElement("div");
+    lawBox.className = "laws";
+    lawBox.innerHTML = "<b>Relevant Laws:</b><br>" +
+      laws.map(l => `• ${l.section}`).join("<br>");
+    msg.appendChild(lawBox);
+  }
+
   chat.appendChild(msg);
   chat.scrollTop = chat.scrollHeight;
+}
+
+function sample(q) {
+  document.getElementById("query").value = q;
+}
+
+function clearChat() {
+  document.getElementById("chat").innerHTML = "";
+  history = [];
 }
 
 async function ask() {
@@ -25,7 +44,7 @@ async function ask() {
   input.value = "";
 
   history.push({ role: "user", content: q });
-  if (history.length > 6) history = history.slice(-6);
+  history = history.slice(-6);
 
   add("Thinking...", "bot");
 
@@ -33,21 +52,29 @@ async function ask() {
     const res = await fetch(API, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        query: q,
-        history: history
-      })
+      body: JSON.stringify({ query: q, history })
     });
 
-    const data = await res.json();
+    const text = await res.text();
 
-    add(data.answer, "bot");
+    let data;
+    try {
+      data = JSON.parse(text);
+    } catch {
+      add("Server restarting. Please wait 30 seconds.", "bot");
+      return;
+    }
+
+    if (!data.answer) {
+      add("Backend is waking up. Try again shortly.", "bot");
+      return;
+    }
+
+    add(data.answer, "bot", data.laws || []);
+
     history.push({ role: "assistant", content: data.answer });
 
-    document.getElementById("info").innerText =
-      "Detected language: " + data.language;
-
-  } catch {
-    add("Server waking up. Try again shortly.", "bot");
+  } catch (err) {
+    add("Network error. Backend may be rebuilding.", "bot");
   }
 }

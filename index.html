@@ -8,22 +8,21 @@
 
 <body>
 
-<div class="app">
+<header>
+  <h1>⚖️ NyayaBot</h1>
+  <p>Indian Legal AI Assistant</p>
+</header>
 
-  <header>
-    <h1>⚖️ NyayaBot</h1>
-    <p>Indian Legal Assistant</p>
-  </header>
+<div class="toolbar">
+  <button onclick="clearChat()">🧹 Clear Chat</button>
+  <button onclick="sample('Can police arrest without warrant?')">⚖️ Sample</button>
+</div>
 
-  <div id="chat" class="chat"></div>
+<div id="chat" class="chat"></div>
 
-  <div class="info" id="info"></div>
-
-  <div class="input-box">
-    <textarea id="query" placeholder="Ask in English or Hinglish..."></textarea>
-    <button onclick="ask()">Ask</button>
-  </div>
-
+<div class="input-area">
+  <textarea id="query" placeholder="Ask in English or Hinglish..."></textarea>
+  <button onclick="ask()">Ask</button>
 </div>
 
 <script src="script.js"></script>
