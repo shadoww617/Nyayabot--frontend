@@ -1,91 +1,100 @@
-body {
+* {
   margin: 0;
-  font-family: system-ui;
-  background: #f7f7f8;
+  padding: 0;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  background: #0b1320;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
 }
 
 header {
-  background: #111827;
-  color: white;
-  padding: 14px;
   text-align: center;
-}
-
-.toolbar {
-  display: flex;
-  gap: 10px;
-  padding: 10px;
-  background: #e5e7eb;
-  justify-content: center;
-}
-
-.toolbar button {
-  padding: 8px 14px;
-  border: none;
-  background: #2563eb;
-  color: white;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-.chat {
-  max-width: 900px;
-  margin: auto;
   padding: 20px;
+  background: #0f172a;
+  border-bottom: 1px solid #1e293b;
 }
 
-.msg {
-  margin-bottom: 16px;
+header h1 {
+  font-size: 28px;
+}
+
+header p {
+  opacity: 0.8;
+}
+
+#chatBox {
+  flex: 1;
+  padding: 25px;
+  overflow-y: auto;
+}
+
+.message {
+  max-width: 70%;
+  margin-bottom: 15px;
+  padding: 14px;
+  border-radius: 10px;
+  line-height: 1.6;
 }
 
 .user {
-  text-align: right;
+  background: #2563eb;
+  margin-left: auto;
 }
 
 .bot {
-  text-align: left;
+  background: #1e293b;
+  border-left: 4px solid #38bdf8;
 }
 
-.bubble {
-  display: inline-block;
-  padding: 14px;
-  border-radius: 12px;
-  max-width: 75%;
-}
-
-.user .bubble {
-  background: #2563eb;
-  color: white;
-}
-
-.bot .bubble {
-  background: white;
-  border-left: 4px solid #2563eb;
-}
-
-.laws {
-  margin-top: 8px;
-  background: #f1f5f9;
+.law-card {
+  background: #020617;
+  border: 1px solid #334155;
   padding: 10px;
-  border-radius: 6px;
+  margin-top: 10px;
+  border-radius: 8px;
   font-size: 14px;
+}
+
+footer {
+  border-top: 1px solid #1e293b;
+  padding: 10px;
+  background: #020617;
 }
 
 .input-area {
   display: flex;
-  padding: 15px;
-  border-top: 1px solid #ccc;
-  position: sticky;
-  bottom: 0;
-  background: white;
+  gap: 10px;
 }
 
 textarea {
   flex: 1;
-  padding: 10px;
+  height: 60px;
   resize: none;
+  padding: 10px;
+  border-radius: 6px;
+  border: none;
 }
 
 button {
-  margin-left: 10px;
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 0 20px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #1d4ed8;
+}
+
+#language {
+  font-size: 13px;
+  margin-bottom: 6px;
+  opacity: 0.8;
 }

@@ -1,80 +1,62 @@
-const API = "https://shadoww617-nyayabot.hf.space/ask";
+const API_URL = "https://shadoww617-nyayabot.hf.space/ask";
 
-let history = [];
+const chatBox = document.getElementById("chatBox");
+const input = document.getElementById("queryInput");
+const askBtn = document.getElementById("askBtn");
+const languageBox = document.getElementById("language");
 
-function add(text, type, laws = []) {
-  const chat = document.getElementById("chat");
-
-  const msg = document.createElement("div");
-  msg.className = "msg " + type;
-
-  const bubble = document.createElement("div");
-  bubble.className = "bubble";
-  bubble.innerText = text;
-
-  msg.appendChild(bubble);
-
-  if (laws.length > 0) {
-    const lawBox = document.createElement("div");
-    lawBox.className = "laws";
-    lawBox.innerHTML = "<b>Relevant Laws:</b><br>" +
-      laws.map(l => `• ${l.section}`).join("<br>");
-    msg.appendChild(lawBox);
-  }
-
-  chat.appendChild(msg);
-  chat.scrollTop = chat.scrollHeight;
+function addMessage(text, sender) {
+  const div = document.createElement("div");
+  div.className = `message ${sender}`;
+  div.innerText = text;
+  chatBox.appendChild(div);
+  chatBox.scrollTop = chatBox.scrollHeight;
 }
 
-function sample(q) {
-  document.getElementById("query").value = q;
+function addLawCard(text) {
+  const div = document.createElement("div");
+  div.className = "law-card";
+  div.innerText = text;
+  chatBox.appendChild(div);
 }
 
-function clearChat() {
-  document.getElementById("chat").innerHTML = "";
-  history = [];
-}
+async function askQuestion() {
+  const query = input.value.trim();
+  if (!query) return;
 
-async function ask() {
-  const input = document.getElementById("query");
-  const q = input.value.trim();
-  if (!q) return;
-
-  add(q, "user");
+  addMessage(query, "user");
   input.value = "";
 
-  history.push({ role: "user", content: q });
-  history = history.slice(-6);
-
-  add("Thinking...", "bot");
+  addMessage("Thinking...", "bot");
 
   try {
-    const res = await fetch(API, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ query: q, history })
-    });
+    const response = await fetch(
+      `${API_URL}?query=${encodeURIComponent(query)}`,
+      { method: "POST" }
+    );
 
-    const text = await res.text();
+    const data = await response.json();
 
-    let data;
-    try {
-      data = JSON.parse(text);
-    } catch {
-      add("Server restarting. Please wait 30 seconds.", "bot");
-      return;
-    }
+    // remove "Thinking..."
+    chatBox.lastChild.remove();
 
-    if (!data.answer) {
-      add("Backend is waking up. Try again shortly.", "bot");
-      return;
-    }
+    // MAIN FIX — these keys exist
+    addMessage(data.answer, "bot");
 
-    add(data.answer, "bot", data.laws || []);
-
-    history.push({ role: "assistant", content: data.answer });
+    languageBox.innerText =
+      "Detected language: " + (data.language || "unknown");
 
   } catch (err) {
-    add("Network error. Backend may be rebuilding.", "bot");
+    chatBox.lastChild.remove();
+    addMessage("Server not responding. Try again.", "bot");
   }
 }
+
+askBtn.addEventListener("click", askQuestion);
+
+input.addEventListener("keydown", (e) => {
+  if (e.key === "Enter" && !e.shiftKey) {
+    e.preventDefault();
+    askQuestion();
+  }
+});
