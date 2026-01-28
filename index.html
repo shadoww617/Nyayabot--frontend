@@ -1,42 +1,28 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <title>NyayaBot — Indian Legal Assistant</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <link rel="stylesheet" href="style.css" />
+  <title>NyayaBot</title>
+  <meta charset="utf-8" />
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
 <div class="app">
 
-  <aside class="sidebar">
-    <h2>⚖️ NyayaBot</h2>
-    <p class="tagline">Indian Legal AI Assistant</p>
+  <header>
+    <h1>⚖️ NyayaBot</h1>
+    <p>Indian Legal Assistant</p>
+  </header>
 
-    <button class="side-btn" onclick="sample('Can police arrest without warrant?')">Arrest without warrant</button>
-    <button class="side-btn" onclick="sample('Property dispute between brothers')">Property dispute</button>
-    <button class="side-btn" onclick="sample('Cyber fraud complaint process')">Cyber fraud</button>
+  <div id="chat" class="chat"></div>
 
-    <div class="note">
-      Educational use only.<br/>
-      Not legal advice.
-    </div>
-  </aside>
+  <div class="info" id="info"></div>
 
-  <main class="chat-area">
-
-    <div id="chatBox" class="chat-box"></div>
-
-    <div class="input-area">
-      <textarea id="queryInput" placeholder="Ask your legal question in English or Hinglish..."></textarea>
-      <button id="sendBtn" onclick="ask()">Ask</button>
-    </div>
-
-    <div id="status" class="status"></div>
-
-  </main>
+  <div class="input-box">
+    <textarea id="query" placeholder="Ask in English or Hinglish..."></textarea>
+    <button onclick="ask()">Ask</button>
+  </div>
 
 </div>
 
