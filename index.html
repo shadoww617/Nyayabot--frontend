@@ -1,25 +1,31 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>NyayaBot</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <title>NyayaBot — Indian Legal Assistant</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
 
-<header>
-  ⚖️ NyayaBot
-  <p>Indian Legal Assistant</p>
-</header>
+  <header>
+    <h1>⚖️ NyayaBot</h1>
+    <p>Indian Legal Assistant</p>
+  </header>
 
-<div id="chat"></div>
+  <div id="chat"></div>
 
-<div id="law-box"></div>
+  <div class="input-area">
+    <textarea
+      id="userInput"
+      placeholder="Ask in English or Hinglish..."
+    ></textarea>
+    <button onclick="sendMessage()">Ask</button>
+  </div>
 
-<div class="input-box">
-  <textarea id="input" placeholder="Ask in English or Hinglish..."></textarea>
-  <button onclick="send()">Ask</button>
-</div>
+  <script src="script.js"></script>
 
-<script src="script.js"></script>
 </body>
 </html>
