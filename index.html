@@ -2,30 +2,31 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>NyayaBot — Indian Legal Assistant</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
+  <title>NyayaBot</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
 
-  <header>
-    <h1>⚖️ NyayaBot</h1>
-    <p>Indian Legal Assistant</p>
-  </header>
-
-  <div id="chat"></div>
-
-  <div class="input-area">
-    <textarea
-      id="userInput"
-      placeholder="Ask in English or Hinglish..."
-    ></textarea>
-    <button onclick="sendMessage()">Ask</button>
+<header class="top-bar">
+  <div class="title">
+    ⚖️ NyayaBot
+    <span>Indian Legal Assistant</span>
   </div>
+</header>
 
-  <script src="script.js"></script>
+<div id="chat-container">
+  <div id="chat-box"></div>
+</div>
 
+<div class="input-area">
+  <textarea
+    id="userInput"
+    placeholder="Ask in English or Hinglish..."
+  ></textarea>
+  <button id="sendBtn">Ask</button>
+</div>
+
+<script src="script.js"></script>
 </body>
 </html>
