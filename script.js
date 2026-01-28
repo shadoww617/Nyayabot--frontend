@@ -1,48 +1,63 @@
-const API_URL = "https://shadoww617-nyayabot.hf.space/ask";
+const API = "https://shadoww617-nyayabot.hf.space/ask";
 
-function addMessage(text, type) {
-    const chatBox = document.getElementById("chatBox");
+function add(text, type) {
+  const box = document.getElementById("chatBox");
+  const msg = document.createElement("div");
+  msg.className = "msg " + type;
 
-    const msg = document.createElement("div");
-    msg.className = `message ${type}`;
+  const bubble = document.createElement("div");
+  bubble.className = "bubble";
+  bubble.innerText = text;
 
-    const bubble = document.createElement("div");
-    bubble.className = "bubble";
-    bubble.innerText = text;
+  msg.appendChild(bubble);
+  box.appendChild(msg);
 
-    msg.appendChild(bubble);
-    chatBox.appendChild(msg);
-
-    chatBox.scrollTop = chatBox.scrollHeight;
+  box.scrollTop = box.scrollHeight;
 }
 
-async function askQuestion() {
-    const input = document.getElementById("queryInput");
-    const question = input.value.trim();
+function sample(text) {
+  document.getElementById("queryInput").value = text;
+}
 
-    if (!question) return;
+async function ask() {
+  const input = document.getElementById("queryInput");
+  const q = input.value.trim();
+  if (!q) return;
 
-    addMessage(question, "user");
-    input.value = "";
+  add(q, "user");
+  input.value = "";
 
-    addMessage("Analyzing legal context...", "bot");
+  add("⏳ Analyzing legal context…", "bot");
+  document.getElementById("status").innerText = "Connecting to NyayaBot…";
 
+  async function fetchRetry(retry = 1) {
     try {
-        const response = await fetch(`${API_URL}?query=${encodeURIComponent(question)}`, {
-            method: "POST",
-            headers: {
-                "accept": "application/json"
-            }
-        });
+      const res = await fetch(API + "?query=" + encodeURIComponent(q), {
+        method: "POST"
+      });
 
-        const data = await response.json();
+      if (!res.ok) throw new Error("Server");
 
-        const answer =
-            `📘 Legal Explanation:\n\n${data.answer}`;
-
-        addMessage(answer, "bot");
-
-    } catch (err) {
-        addMessage("⚠️ Server error. Please try again later.", "bot");
+      return await res.json();
+    } catch (e) {
+      if (retry > 0) {
+        document.getElementById("status").innerText =
+          "Waking server… retrying";
+        await new Promise(r => setTimeout(r, 2500));
+        return fetchRetry(retry - 1);
+      }
+      throw e;
     }
+  }
+
+  try {
+    const data = await fetchRetry(1);
+
+    add("📘 " + data.answer, "bot");
+    document.getElementById("status").innerText = "Answer generated";
+
+  } catch (err) {
+    add("⚠️ Server unavailable. Please retry in 30 seconds.", "bot");
+    document.getElementById("status").innerText = "Backend sleeping";
+  }
 }
