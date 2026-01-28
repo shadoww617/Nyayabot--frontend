@@ -1,62 +1,58 @@
-const API_URL = "https://shadoww617-nyayabot.hf.space/ask";
+const API = "https://shadoww617-nyayabot.hf.space/ask";
+let history = [];
 
-const chatBox = document.getElementById("chatBox");
-const input = document.getElementById("queryInput");
-const askBtn = document.getElementById("askBtn");
-const languageBox = document.getElementById("language");
+async function send() {
+  const input = document.getElementById("input");
+  const text = input.value.trim();
+  if (!text) return;
 
-function addMessage(text, sender) {
-  const div = document.createElement("div");
-  div.className = `message ${sender}`;
-  div.innerText = text;
-  chatBox.appendChild(div);
-  chatBox.scrollTop = chatBox.scrollHeight;
-}
-
-function addLawCard(text) {
-  const div = document.createElement("div");
-  div.className = "law-card";
-  div.innerText = text;
-  chatBox.appendChild(div);
-}
-
-async function askQuestion() {
-  const query = input.value.trim();
-  if (!query) return;
-
-  addMessage(query, "user");
+  addMessage(text, "user");
   input.value = "";
+
+  const payload = {
+    query: text,
+    history: history
+  };
+
+  history.push({ role: "user", text });
 
   addMessage("Thinking...", "bot");
 
-  try {
-    const response = await fetch(
-      `${API_URL}?query=${encodeURIComponent(query)}`,
-      { method: "POST" }
-    );
+  const res = await fetch(API, {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify(payload)
+  });
 
-    const data = await response.json();
+  const data = await res.json();
 
-    // remove "Thinking..."
-    chatBox.lastChild.remove();
+  document.querySelector(".bot:last-child").remove();
 
-    // MAIN FIX — these keys exist
-    addMessage(data.answer, "bot");
+  addMessage(data.answer, "bot");
 
-    languageBox.innerText =
-      "Detected language: " + (data.language || "unknown");
+  history.push({ role: "assistant", text: data.answer });
 
-  } catch (err) {
-    chatBox.lastChild.remove();
-    addMessage("Server not responding. Try again.", "bot");
-  }
+  showLaws(data.laws);
 }
 
-askBtn.addEventListener("click", askQuestion);
+function addMessage(text, cls) {
+  const div = document.createElement("div");
+  div.className = cls;
+  div.innerText = text;
+  document.getElementById("chat").appendChild(div);
+  window.scrollTo(0, document.body.scrollHeight);
+}
 
-input.addEventListener("keydown", (e) => {
-  if (e.key === "Enter" && !e.shiftKey) {
-    e.preventDefault();
-    askQuestion();
-  }
-});
+function showLaws(laws) {
+  const box = document.getElementById("law-box");
+  box.innerHTML = "";
+
+  if (!laws || laws.length === 0) return;
+
+  laws.forEach(l => {
+    const d = document.createElement("div");
+    d.className = "law";
+    d.innerText = "📘 " + l;
+    box.appendChild(d);
+  });
+}

@@ -1,28 +1,25 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <title>NyayaBot – Indian Legal Assistant</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>NyayaBot</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-  <header>
-    <h1>⚖️ NyayaBot</h1>
-    <p>Indian Legal Assistant</p>
-  </header>
 
-  <main id="chatBox"></main>
+<header>
+  ⚖️ NyayaBot
+  <p>Indian Legal Assistant</p>
+</header>
 
-  <footer>
-    <div id="language">Detected language: —</div>
+<div id="chat"></div>
 
-    <div class="input-area">
-      <textarea id="queryInput" placeholder="Ask in English or Hinglish..."></textarea>
-      <button id="askBtn">Ask</button>
-    </div>
-  </footer>
+<div id="law-box"></div>
 
-  <script src="script.js"></script>
+<div class="input-box">
+  <textarea id="input" placeholder="Ask in English or Hinglish..."></textarea>
+  <button onclick="send()">Ask</button>
+</div>
+
+<script src="script.js"></script>
 </body>
 </html>

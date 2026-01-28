@@ -1,100 +1,64 @@
-* {
-  margin: 0;
-  padding: 0;
-  font-family: Arial, sans-serif;
-}
-
 body {
-  background: #0b1320;
-  color: #fff;
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
+  background: #0b1220;
+  color: white;
+  font-family: Arial;
 }
 
 header {
   text-align: center;
   padding: 20px;
-  background: #0f172a;
-  border-bottom: 1px solid #1e293b;
-}
-
-header h1 {
   font-size: 28px;
 }
 
-header p {
-  opacity: 0.8;
+#chat {
+  max-width: 900px;
+  margin: auto;
+  padding: 20px;
 }
 
-#chatBox {
-  flex: 1;
-  padding: 25px;
-  overflow-y: auto;
-}
-
-.message {
-  max-width: 70%;
-  margin-bottom: 15px;
+.user, .bot {
   padding: 14px;
   border-radius: 10px;
-  line-height: 1.6;
+  margin: 10px 0;
 }
 
 .user {
   background: #2563eb;
-  margin-left: auto;
+  text-align: right;
 }
 
 .bot {
   background: #1e293b;
-  border-left: 4px solid #38bdf8;
 }
 
-.law-card {
-  background: #020617;
-  border: 1px solid #334155;
+#law-box {
+  max-width: 900px;
+  margin: auto;
   padding: 10px;
-  margin-top: 10px;
-  border-radius: 8px;
-  font-size: 14px;
 }
 
-footer {
-  border-top: 1px solid #1e293b;
+.law {
+  background: #0f172a;
+  border-left: 4px solid gold;
   padding: 10px;
-  background: #020617;
+  margin-top: 5px;
 }
 
-.input-area {
+.input-box {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background: #020617;
+  padding: 15px;
   display: flex;
-  gap: 10px;
 }
 
 textarea {
   flex: 1;
   height: 60px;
-  resize: none;
-  padding: 10px;
-  border-radius: 6px;
-  border: none;
 }
 
 button {
-  background: #2563eb;
-  color: white;
-  border: none;
-  padding: 0 20px;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-button:hover {
-  background: #1d4ed8;
-}
-
-#language {
-  font-size: 13px;
-  margin-bottom: 6px;
-  opacity: 0.8;
+  margin-left: 10px;
+  padding: 10px 20px;
 }
