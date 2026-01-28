@@ -1,49 +1,48 @@
-const API_URL = "http://127.0.0.1:8000/ask"; // temporary
+const API_URL = "https://shadoww617-nyayabot.hf.space/ask";
 
-const chat = document.getElementById("chat");
+function addMessage(text, type) {
+    const chatBox = document.getElementById("chatBox");
 
-function addMessage(html) {
-  chat.innerHTML += html;
-  chat.scrollTop = chat.scrollHeight;
+    const msg = document.createElement("div");
+    msg.className = `message ${type}`;
+
+    const bubble = document.createElement("div");
+    bubble.className = "bubble";
+    bubble.innerText = text;
+
+    msg.appendChild(bubble);
+    chatBox.appendChild(msg);
+
+    chatBox.scrollTop = chatBox.scrollHeight;
 }
 
-async function ask() {
-  const input = document.getElementById("query");
-  const question = input.value.trim();
-  if (!question) return;
+async function askQuestion() {
+    const input = document.getElementById("queryInput");
+    const question = input.value.trim();
 
-  addMessage(`
-    <div class="message user">
-      <b>You:</b><br>${question}
-    </div>
-  `);
+    if (!question) return;
 
-  input.value = "";
+    addMessage(question, "user");
+    input.value = "";
 
-  addMessage(`<div class="message bot">Thinking...</div>`);
+    addMessage("Analyzing legal context...", "bot");
 
-  const response = await fetch(`${API_URL}?query=${encodeURIComponent(question)}`, {
-    method: "POST"
-  });
+    try {
+        const response = await fetch(`${API_URL}?query=${encodeURIComponent(question)}`, {
+            method: "POST",
+            headers: {
+                "accept": "application/json"
+            }
+        });
 
-  const data = await response.json();
+        const data = await response.json();
 
-  let table = "";
-  data.citations.forEach(c => {
-    table += `<tr><td>${c}</td></tr>`;
-  });
+        const answer =
+            `📘 Legal Explanation:\n\n${data.answer}`;
 
-  chat.lastChild.innerHTML = `
-    <b>🔍 Extracted Legal Information</b>
-    <div class="section-box">
-      <table class="table">${table}</table>
-    </div>
+        addMessage(answer, "bot");
 
-    <br><b>🧠 Explanation</b><br><br>
-    ${data.explanation}
-
-    <div style="margin-top:10px;color:#fbbf24;">
-      ⚠️ Educational information only. Not legal advice.
-    </div>
-  `;
+    } catch (err) {
+        addMessage("⚠️ Server error. Please try again later.", "bot");
+    }
 }
