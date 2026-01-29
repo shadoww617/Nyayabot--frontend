@@ -8,25 +8,28 @@
 
 <body>
 
-<header class="top-bar">
-  <div class="title">
+  <header>
     ⚖️ NyayaBot
-    <span>Indian Legal Assistant</span>
+    <div class="subtitle">Indian Legal Assistant</div>
+  </header>
+
+  <!-- Quick actions -->
+  <div class="quick-actions">
+    <button onclick="quickAsk('Can police arrest without warrant?')">🚔 Arrest</button>
+    <button onclick="quickAsk('What is IPC 302?')">📘 IPC 302</button>
+    <button onclick="quickAsk('What are my rights during arrest?')">⚖️ Rights</button>
+    <button onclick="clearChat()">🧹 Clear</button>
   </div>
-</header>
 
-<div id="chat-container">
-  <div id="chat-box"></div>
-</div>
+  <!-- Chat -->
+  <div id="chat" class="chat-box"></div>
 
-<div class="input-area">
-  <textarea
-    id="userInput"
-    placeholder="Ask in English or Hinglish..."
-  ></textarea>
-  <button id="sendBtn">Ask</button>
-</div>
+  <!-- Input -->
+  <div class="input-bar">
+    <input id="userInput" placeholder="Ask in English or Hinglish..." />
+    <button onclick="askQuestion()">Ask</button>
+  </div>
 
-<script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>

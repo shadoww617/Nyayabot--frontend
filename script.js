@@ -1,85 +1,80 @@
-const chat = document.getElementById("chat-box");
-const input = document.getElementById("userInput");
-const sendBtn = document.getElementById("sendBtn");
+const API_URL = "https://shadoww617-nyayabot.hf.space/ask";
+let chatHistory = [];
 
-let conversationContext = [];
-
-function addMessage(text, type) {
-  const msg = document.createElement("div");
-  msg.className = type === "user" ? "user-msg" : "bot-msg";
-  msg.innerText = text;
-  chat.appendChild(msg);
-  chat.scrollTop = chat.scrollHeight;
+function quickAsk(text) {
+  document.getElementById("userInput").value = text;
+  askQuestion();
 }
 
-function addThinking() {
-  const msg = document.createElement("div");
-  msg.className = "bot-msg";
-  msg.innerText = "Thinking...";
-  chat.appendChild(msg);
-  chat.scrollTop = chat.scrollHeight;
-  return msg;
+function clearChat() {
+  document.getElementById("chat").innerHTML = "";
+  chatHistory = [];
 }
 
-function removeThinking(el) {
-  if (el) el.remove();
-}
+async function askQuestion() {
+  const input = document.getElementById("userInput");
+  const query = input.value.trim();
+  if (!query) return;
 
-async function sendMessage() {
-  const text = input.value.trim();
-  if (!text) return;
-
-  addMessage(text, "user");
-  conversationContext.push("User: " + text);
+  appendUser(query);
   input.value = "";
 
-  const thinking = addThinking();
+  const botDiv = appendBot("Thinking...");
 
   try {
-    const response = await fetchWithRetry(
-      "https://shadoww617-nyayabot.hf.space/ask?query=" +
-        encodeURIComponent(
-          conversationContext.slice(-6).join("\n")
-        ),
-      2
-    );
+    const res = await fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        query,
+        history: chatHistory
+      })
+    });
 
-    const data = await response.json();
-    removeThinking(thinking);
+    if (!res.ok) throw new Error("HF sleeping");
 
-    if (data.answer) {
-      addMessage(data.answer, "bot");
-      conversationContext.push("Bot: " + data.answer);
-    } else {
-      addMessage("⚠️ Unexpected server response.", "bot");
-    }
+    const data = await res.json();
 
-  } catch {
-    removeThinking(thinking);
-    addMessage(
-      "⚠️ HuggingFace backend is sleeping or restarting. Please wait 20–30 seconds.",
-      "bot"
-    );
+    botDiv.innerHTML = formatAnswer(data.answer, data.references);
+
+    chatHistory.push({
+      user: query,
+      bot: data.answer
+    });
+
+  } catch (err) {
+    botDiv.innerHTML =
+      "⚠️ Server is restarting or sleeping. Please retry after 10–15 seconds.";
   }
 }
 
-async function fetchWithRetry(url, retries) {
-  try {
-    const res = await fetch(url, { method: "POST" });
-    if (!res.ok) throw new Error();
-    return res;
-  } catch {
-    if (retries <= 0) throw new Error();
-    await new Promise(r => setTimeout(r, 3000));
-    return fetchWithRetry(url, retries - 1);
-  }
+function appendUser(text) {
+  const chat = document.getElementById("chat");
+  const div = document.createElement("div");
+  div.className = "msg user";
+  div.innerText = text;
+  chat.appendChild(div);
+  chat.scrollTop = chat.scrollHeight;
 }
 
-sendBtn.onclick = sendMessage;
+function appendBot(text) {
+  const chat = document.getElementById("chat");
+  const div = document.createElement("div");
+  div.className = "msg bot";
+  div.innerText = text;
+  chat.appendChild(div);
+  chat.scrollTop = chat.scrollHeight;
+  return div;
+}
 
-input.addEventListener("keydown", e => {
-  if (e.key === "Enter" && !e.shiftKey) {
-    e.preventDefault();
-    sendMessage();
+function formatAnswer(answer, refs) {
+  let html = answer.replace(/\n/g, "<br>");
+
+  if (refs && refs.length > 0) {
+    html += `<div class="refs"><b>Law References:</b><ul>`;
+    refs.forEach(r => html += `<li>${r}</li>`);
+    html += "</ul></div>";
   }
-});
+
+  return html;
+}

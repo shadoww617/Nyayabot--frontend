@@ -1,107 +1,117 @@
 body {
   margin: 0;
-  background: radial-gradient(circle at top, #0b1630, #020617);
+  background: linear-gradient(120deg, #020617, #020f2a);
   color: white;
   font-family: "Segoe UI", sans-serif;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
 }
 
-.top-bar {
-  padding: 18px;
+/* ---------- HEADER ---------- */
+
+header {
   text-align: center;
-  border-bottom: 1px solid rgba(255,255,255,0.1);
-  background: rgba(10,20,40,0.8);
+  padding: 22px;
+  font-size: 36px;
+  font-weight: 700;
 }
 
-.title {
-  font-size: 28px;
-  font-weight: bold;
+.subtitle {
+  font-size: 16px;
+  opacity: 0.75;
 }
 
-.title span {
-  display: block;
-  font-size: 14px;
-  opacity: 0.7;
-  margin-top: 4px;
-}
+/* ---------- QUICK BUTTONS ---------- */
 
-#chat-container {
-  flex: 1;
-  overflow-y: auto;
-  padding: 25px;
-}
-
-#chat-container::-webkit-scrollbar {
-  width: 6px;
-}
-#chat-container::-webkit-scrollbar-thumb {
-  background: #2f6fff;
-  border-radius: 5px;
-}
-
-.user-msg {
-  align-self: flex-end;
-  background: linear-gradient(135deg, #2f6fff, #4c8dff);
-  padding: 14px 18px;
-  border-radius: 18px 18px 4px 18px;
-  margin: 10px 0;
-  max-width: 70%;
-  animation: slideInRight 0.3s ease;
-}
-
-.bot-msg {
-  align-self: flex-start;
-  background: rgba(255,255,255,0.08);
-  padding: 16px 18px;
-  border-radius: 18px 18px 18px 4px;
-  margin: 10px 0;
-  max-width: 75%;
-  animation: fadeIn 0.4s ease;
-  box-shadow: 0 0 20px rgba(47,111,255,0.15);
-}
-
-.input-area {
+.quick-actions {
   display: flex;
-  gap: 10px;
-  padding: 15px;
-  background: rgba(5,10,25,0.9);
-  border-top: 1px solid rgba(255,255,255,0.1);
+  justify-content: center;
+  gap: 12px;
+  padding-bottom: 10px;
 }
 
-textarea {
-  flex: 1;
-  resize: none;
-  height: 50px;
-  padding: 12px;
-  border-radius: 12px;
-  border: none;
-  font-size: 15px;
-}
-
-button {
-  width: 90px;
-  border: none;
-  border-radius: 12px;
-  background: #2f6fff;
+.quick-actions button {
+  background: rgba(255,255,255,0.08);
   color: white;
-  font-size: 15px;
+  border: 1px solid rgba(255,255,255,0.15);
+  padding: 8px 14px;
+  border-radius: 20px;
   cursor: pointer;
   transition: 0.2s;
 }
 
-button:hover {
-  background: #4c8dff;
-  transform: scale(1.05);
+.quick-actions button:hover {
+  background: #2563eb;
 }
+
+/* ---------- CHAT ---------- */
+
+.chat-box {
+  height: 68vh;
+  overflow-y: auto;
+  padding: 25px;
+}
+
+.msg {
+  max-width: 78%;
+  padding: 18px;
+  margin: 14px 0;
+  border-radius: 16px;
+  font-size: 18px;
+  line-height: 1.6;
+  animation: fadeIn 0.3s ease;
+}
+
+.user {
+  background: #2563eb;
+  margin-left: auto;
+}
+
+.bot {
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.12);
+}
+
+/* ---------- LAW REFERENCES ---------- */
+
+.refs {
+  margin-top: 12px;
+  padding-top: 8px;
+  border-top: 1px dashed rgba(255,255,255,0.25);
+  font-size: 15px;
+  opacity: 0.9;
+}
+
+/* ---------- INPUT ---------- */
+
+.input-bar {
+  display: flex;
+  padding: 18px;
+  border-top: 1px solid rgba(255,255,255,0.15);
+}
+
+input {
+  flex: 1;
+  padding: 14px;
+  background: #020617;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+}
+
+button {
+  margin-left: 10px;
+  padding: 14px 22px;
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* ---------- ANIMATION ---------- */
 
 @keyframes fadeIn {
-  from {opacity:0; transform:translateY(5px);}
-  to {opacity:1; transform:translateY(0);}
-}
-
-@keyframes slideInRight {
-  from {opacity:0; transform:translateX(20px);}
-  to {opacity:1; transform:translateX(0);}
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
 }
