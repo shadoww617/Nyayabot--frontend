@@ -1,117 +1,74 @@
 body {
   margin: 0;
-  background: linear-gradient(120deg, #020617, #020f2a);
-  color: white;
   font-family: "Segoe UI", sans-serif;
+  background: linear-gradient(180deg,#020617,#020617);
+  color: white;
 }
-
-/* ---------- HEADER ---------- */
 
 header {
   text-align: center;
-  padding: 22px;
-  font-size: 36px;
-  font-weight: 700;
-}
-
-.subtitle {
-  font-size: 16px;
-  opacity: 0.75;
-}
-
-/* ---------- QUICK BUTTONS ---------- */
-
-.quick-actions {
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-  padding-bottom: 10px;
-}
-
-.quick-actions button {
-  background: rgba(255,255,255,0.08);
-  color: white;
-  border: 1px solid rgba(255,255,255,0.15);
-  padding: 8px 14px;
-  border-radius: 20px;
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-.quick-actions button:hover {
-  background: #2563eb;
-}
-
-/* ---------- CHAT ---------- */
-
-.chat-box {
-  height: 68vh;
-  overflow-y: auto;
   padding: 25px;
+  font-size: 28px;
+  font-weight: bold;
 }
 
-.msg {
-  max-width: 78%;
+#chat {
+  height: 75vh;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+.user-msg {
+  background: #2563eb;
   padding: 18px;
-  margin: 14px 0;
-  border-radius: 16px;
+  border-radius: 14px;
+  max-width: 70%;
+  margin-left: auto;
+  margin-bottom: 18px;
   font-size: 18px;
-  line-height: 1.6;
+}
+
+.ai-msg {
+  background: #0f172a;
+  padding: 18px;
+  border-radius: 14px;
+  max-width: 75%;
+  margin-bottom: 18px;
+  font-size: 18px;
   animation: fadeIn 0.3s ease;
 }
 
-.user {
-  background: #2563eb;
-  margin-left: auto;
+.thinking {
+  opacity: 0.7;
+  font-style: italic;
 }
 
-.bot {
-  background: rgba(255,255,255,0.07);
-  border: 1px solid rgba(255,255,255,0.12);
+@keyframes fadeIn {
+  from {opacity:0; transform:translateY(5px);}
+  to {opacity:1;}
 }
 
-/* ---------- LAW REFERENCES ---------- */
-
-.refs {
-  margin-top: 12px;
-  padding-top: 8px;
-  border-top: 1px dashed rgba(255,255,255,0.25);
-  font-size: 15px;
-  opacity: 0.9;
-}
-
-/* ---------- INPUT ---------- */
-
-.input-bar {
+footer {
   display: flex;
-  padding: 18px;
-  border-top: 1px solid rgba(255,255,255,0.15);
+  padding: 15px;
+  gap: 10px;
+  border-top: 1px solid #1e293b;
 }
 
-input {
+textarea {
   flex: 1;
   padding: 14px;
-  background: #020617;
-  color: white;
-  border: none;
+  font-size: 18px;
   border-radius: 10px;
-  font-size: 16px;
+  border: none;
+  outline: none;
 }
 
 button {
-  margin-left: 10px;
-  padding: 14px 22px;
   background: #2563eb;
   color: white;
   border: none;
+  padding: 14px 22px;
   border-radius: 10px;
-  font-size: 16px;
   cursor: pointer;
-}
-
-/* ---------- ANIMATION ---------- */
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(6px); }
-  to { opacity: 1; transform: translateY(0); }
 }

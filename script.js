@@ -1,80 +1,76 @@
-const API_URL = "https://shadoww617-nyayabot.hf.space/ask";
-let chatHistory = [];
+const chat = document.getElementById("chat");
+const input = document.getElementById("userInput");
 
-function quickAsk(text) {
-  document.getElementById("userInput").value = text;
-  askQuestion();
+let conversationHistory = [];
+
+function addMessage(text, type) {
+  const msg = document.createElement("div");
+  msg.className = type === "user" ? "user-msg" : "ai-msg";
+  msg.textContent = text;
+  chat.appendChild(msg);
+  chat.scrollTop = chat.scrollHeight;
 }
 
-function clearChat() {
-  document.getElementById("chat").innerHTML = "";
-  chatHistory = [];
-}
+async function sendMessage() {
+  const text = input.value.trim();
+  if (!text) return;
 
-async function askQuestion() {
-  const input = document.getElementById("userInput");
-  const query = input.value.trim();
-  if (!query) return;
-
-  appendUser(query);
+  addMessage(text, "user");
   input.value = "";
 
-  const botDiv = appendBot("Thinking...");
+  const thinking = document.createElement("div");
+  thinking.className = "ai-msg thinking";
+  thinking.textContent = "Thinking...";
+  chat.appendChild(thinking);
 
   try {
-    const res = await fetch(API_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        query,
-        history: chatHistory
-      })
-    });
+    const response = await fetchWithRetry(
+      "https://shadoww617-nyayabot.hf.space/ask",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          query: text,
+          history: conversationHistory
+        })
+      },
+      2
+    );
 
-    if (!res.ok) throw new Error("HF sleeping");
+    const data = await response.json();
+    thinking.remove();
 
-    const data = await res.json();
+    addMessage(data.answer, "ai");
 
-    botDiv.innerHTML = formatAnswer(data.answer, data.references);
+    conversationHistory.push(
+      { role: "user", content: text },
+      { role: "assistant", content: data.answer }
+    );
 
-    chatHistory.push({
-      user: query,
-      bot: data.answer
-    });
-
-  } catch (err) {
-    botDiv.innerHTML =
-      "⚠️ Server is restarting or sleeping. Please retry after 10–15 seconds.";
+  } catch {
+    thinking.remove();
+    addMessage(
+      "⚠️ Server is sleeping or restarting. Please wait 20–30 seconds and try again.",
+      "ai"
+    );
   }
 }
 
-function appendUser(text) {
-  const chat = document.getElementById("chat");
-  const div = document.createElement("div");
-  div.className = "msg user";
-  div.innerText = text;
-  chat.appendChild(div);
-  chat.scrollTop = chat.scrollHeight;
-}
-
-function appendBot(text) {
-  const chat = document.getElementById("chat");
-  const div = document.createElement("div");
-  div.className = "msg bot";
-  div.innerText = text;
-  chat.appendChild(div);
-  chat.scrollTop = chat.scrollHeight;
-  return div;
-}
-
-function formatAnswer(answer, refs) {
-  let html = answer.replace(/\n/g, "<br>");
-
-  if (refs && refs.length > 0) {
-    html += `<div class="refs"><b>Law References:</b><ul>`;
-    refs.forEach(r => html += `<li>${r}</li>`);
-    html += "</ul></div>";
+async function fetchWithRetry(url, options, retries) {
+  try {
+    const res = await fetch(url, options);
+    if (!res.ok) throw new Error();
+    return res;
+  } catch {
+    if (retries <= 0) throw new Error();
+    await new Promise(r => setTimeout(r, 3000));
+    return fetchWithRetry(url, options, retries - 1);
   }
-
-  return html;
 }
+
+input.addEventListener("keydown", e => {
+  if (e.key === "Enter") {
+    e.preventDefault();
+    sendMessage();
+  }
+});
